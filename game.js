@@ -371,10 +371,22 @@ class PumpkinPanic {
         this.score = 0;
         this.lives = 3;
         this.difficulty = 1;
+        this.level = 1;
+        this.combo = 0;
+        this.lastCatchTime = 0;
         this.pumpkins = [];
         this.bombs = [];
+        this.powerUps = [];
         this.particles = [];
         this.lastSpawnTime = Date.now();
+        this.powerUpActive = false;
+        this.powerUpType = null;
+        this.powerUpTimeLeft = 0;
+        this.feverMode = false;
+        this.feverTimeLeft = 0;
+        this.screenShake = 0;
+        this.flashEffect = 0;
+        
         this.updateUI();
         this.gameLoop();
     }
@@ -398,8 +410,12 @@ class PumpkinPanic {
             this.flashEffect -= 0.05;
         }
         
-        // Update ghost position - FIX MOUSE MOVEMENT
-        this.ghost.targetX = this.mouseX;
+        // Update ghost position - RESPONSIVE MOUSE MOVEMENT
+        const rect = this.canvas.getBoundingClientRect();
+        const mouseX = this.mouseX;
+        const canvasWidth = rect.width;
+        
+        this.ghost.targetX = mouseX;
         
         if (this.keys['ArrowLeft'] || this.keys['a']) {
             this.ghost.targetX -= this.ghost.speed;
@@ -408,9 +424,9 @@ class PumpkinPanic {
             this.ghost.targetX += this.ghost.speed;
         }
         
-        // Apply mouse control smoothly
-        const speedMultiplier = this.powerUpType === 'speed' ? 2.0 : 1.0;
-        this.ghost.x += (this.ghost.targetX - this.ghost.x) * 0.25 * speedMultiplier;
+        // Apply mouse control smoothly - adapted for mobile
+        const speedMultiplier = this.powerUpType === 'speed' ? 2.5 : 1.8; // Faster for better mobile feel
+        this.ghost.x += (this.ghost.targetX - this.ghost.x) * 0.3 * speedMultiplier;
         
         // Keep ghost in bounds
         this.ghost.x = Math.max(this.ghost.width/2, Math.min(this.width - this.ghost.width/2, this.ghost.x));
