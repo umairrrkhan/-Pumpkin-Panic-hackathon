@@ -1556,9 +1556,18 @@ class PumpkinPanic {
     updateUI() {
         document.getElementById('scoreValue').textContent = this.score;
         document.getElementById('levelValue').textContent = this.level;
-        document.getElementById('livesValue').textContent = '❤️'.repeat(this.lives);
+        
+        // Update hearts display
+        const livesContainer = document.getElementById('livesValue');
+        livesContainer.innerHTML = '';
+        for (let i = 0; i < this.lives; i++) {
+            const heart = document.createElement('span');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            livesContainer.appendChild(heart);
+        }
+        
         document.getElementById('comboValue').textContent = this.combo;
-        document.getElementById('powerUpStatus').textContent = this.powerUpType ? this.powerUpType.toUpperCase() : 'NONE';
     }
     
     
