@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pumpkin Panic! - Halloween Arcade Game</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Ghost+Quake&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a0033 0%, #330066 50%, #4d0099 100%);
+            font-family: 'Ghost Quake', cursive;
+            color: #ff6b35;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            position: relative;
+            border: 3px solid #ff6b35;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        canvas {
+            display: block;
+            background: linear-gradient(to bottom, #0a0014 0%, #1a0033 100%);
+            border-radius: 12px;
+        }
+
+        .ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .score, .level {
+            font-family: 'Creepster', cursive;
+            font-size: 28px;
+            color: #ffa500;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .lives {
+            font-family: 'Creepster', cursive;
+            font-size: 24px;
+            color: #ff4444;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .game-stats {
+            position: absolute;
+            top: 70px;
+            left: 20px;
+            font-family: 'Ghost Quake', cursive;
+            font-size: 16px;
+            color: #ffa500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        .special-moves {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            font-family: 'Ghost Quake', cursive;
+            font-size: 14px;
+            color: #ffa500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .game-over, .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            border-radius: 12px;
+        }
+
+        .game-over h2, .start-screen h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 48px;
+            color: #ff6b35;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(255, 107, 53, 0.5);
+        }
+
+        .game-over p, .start-screen p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #ffa500;
+        }
+
+        button {
+            font-family: 'Creepster', cursive;
+            font-size: 24px;
+            background: linear-gradient(135deg, #ff6b35, #ff8c42);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div class="ui">
+            <div>
+                <div class="score">Score: <span id="scoreValue">0</span></div>
+                <div class="level">Level: <span id="levelValue">1</span></div>
+            </div>
+            <div class="lives">Lives: <span id="livesValue">3</span></div>
+        </div>
+        
+        <div class="game-stats">
+            <div>Combo: <span id="comboValue">0</span>x</div>
+        </div>
+        
+        <div class="special-moves">
+            <div>Power: <span id="powerUpStatus">NONE</span></div>
+        </div>
+
+        <div class="start-screen" id="startScreen">
+            <h1 class="floating">🎃 Pumpkin Panic! 👻</h1>
+            <p>Catch pumpkins, avoid bombs!<br>
+            Use arrow keys or mouse to move.</p>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+
+        <div class="game-over hidden" id="gameOverScreen">
+            <h2>Boo! Game Over!</h2>
+            <p>Final Score: <span id="finalScore">0</span><br>
+            <span id="gameOverMessage">You dropped the pumpkin!</span></p>
+            <button onclick="restartGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
